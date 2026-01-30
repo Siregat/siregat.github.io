@@ -293,14 +293,27 @@ canvas {
 /* ===== TABS ===== */
 .tab-bar {
   position: fixed;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
+  left: 12px;
+  right: 12px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+
+  height: 70px; /* 👈 фиксированная высота */
+
   display: flex;
   gap: 10px;
   padding: 10px;
-  border-radius: 20px;
+
+  border-radius: 22px;
+  z-index: 1000;
+
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.28),
+    rgba(255,255,255,0.1)
+  );
+  backdrop-filter: blur(22px);
 }
+
 
 .tab-btn {
   flex: 1;
@@ -502,4 +515,11 @@ canvas {
   transform: scale(1.05);
 }
 
+/* ===== CALENDAR SAFE AREA ===== */
+#calendar {
+  padding-bottom: 120px; /* 👈 чтобы дни 29–31 были ВЫШЕ tab-bar */
+}
 
+.calendar-grid {
+  margin-bottom: 80px;
+}
