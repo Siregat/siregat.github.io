@@ -151,74 +151,58 @@ input, select {
 canvas {
   margin-top: 10px;
 }
-/* ===== TABS ===== */
+/* ===== TABS С ЭФФЕКТОМ МАСШТАБИРОВАНИЯ ===== */
 .tab-bar {
   position: fixed;
   left: 12px;
   right: 12px;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
-
-  height: 78px; /* 👈 стабильная зона */
-  padding: 10px;
-  gap: 10px;
-
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  height: 78px;
   display: flex;
-  align-items: center;
-
-  border-radius: 24px;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 22px;
   z-index: 1000;
-
-  background: linear-gradient(
-    145deg,
-    rgba(255,255,255,0.35),
-    rgba(255,255,255,0.15)
-  );
-  backdrop-filter: blur(24px);
+  background: linear-gradient(145deg, rgba(255,255,255,0.28), rgba(255,255,255,0.1));
+  backdrop-filter: blur(22px);
 }
-
-
-
 
 .tab-btn {
   flex: 1;
-  height: 100%; /* 👈 ВСЯ ВЫСОТА */
-  border-radius: 18px;
+  padding: 12px;
+  border-radius: 16px;
   border: none;
-
-  font-size: 15px;
-  font-weight: 700;
-
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.15);
   color: #e8f5ee;
-
   cursor: pointer;
+  transform: scale(0.85);
+  opacity: 0.7;
+  font-size: 13px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transition: all 0.2s ease;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .tab-btn.active {
-  background: linear-gradient(
-    145deg,
-    rgba(201,164,76,0.9),
-    rgba(255,230,160,0.7)
-  );
+  flex: 1.6;
+  transform: scale(1);
+  opacity: 1;
+  font-size: 15px;
+  background: linear-gradient(145deg, rgba(201,164,76,0.9), rgba(255,230,160,0.7));
   color: #0b2e1c;
+  box-shadow: 0 8px 20px rgba(201,164,76,0.5), inset 0 1px 2px rgba(255,255,255,0.6);
+}
+
+.tab-btn:not(.active):hover {
+  transform: scale(0.9);
+  opacity: 0.85;
 }
 
 
-.tab-btn.active {
-  background: rgba(201,164,76,0.75);
-  color: #0b2e1c;
-}
 
 
-.tab-btn.active {
-  background: rgba(201,164,76,0.7);
-  color: #0b2e1c;
-}
 
 /* ===== SCREENS ===== */
 .tab-screen.hidden {
@@ -310,30 +294,21 @@ canvas {
   }
 }
 
-/* ===== TABS ===== */
+/* ===== TABS С ЭФФЕКТОМ МАСШТАБИРОВАНИЯ ===== */
 .tab-bar {
   position: fixed;
   left: 12px;
   right: 12px;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
-
-  height: 70px; /* 👈 фиксированная высота */
-
+  height: 78px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   padding: 10px;
-
   border-radius: 22px;
   z-index: 1000;
-
-  background: linear-gradient(
-    145deg,
-    rgba(255,255,255,0.28),
-    rgba(255,255,255,0.1)
-  );
+  background: linear-gradient(145deg, rgba(255,255,255,0.28), rgba(255,255,255,0.1));
   backdrop-filter: blur(22px);
 }
-
 
 .tab-btn {
   flex: 1;
@@ -343,12 +318,32 @@ canvas {
   background: rgba(255,255,255,0.15);
   color: #e8f5ee;
   cursor: pointer;
+  transform: scale(0.85);
+  opacity: 0.7;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .tab-btn.active {
-  background: rgba(201,164,76,0.75);
+  flex: 1.6;
+  transform: scale(1);
+  opacity: 1;
+  font-size: 15px;
+  background: linear-gradient(145deg, rgba(201,164,76,0.9), rgba(255,230,160,0.7));
   color: #0b2e1c;
+  box-shadow: 0 8px 20px rgba(201,164,76,0.5), inset 0 1px 2px rgba(255,255,255,0.6);
 }
+
+.tab-btn:not(.active):hover {
+  transform: scale(0.9);
+  opacity: 0.85;
+}
+
+
 
 .hidden {
   display: none;
@@ -801,7 +796,6 @@ canvas {
 
 
 
-
 /* ===== JÄGER HUNT ARCADE ===== */
 .game-container {
   padding-bottom: 60px;
@@ -1184,92 +1178,29 @@ canvas {
   display: none;
 }
 
-/* ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
-/* Добавьте этот код в конец вашего style.css */
-
-/* Исправление для всех секций - добавляем отступ снизу */
-.tab-content {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
-    /* 80px для таб-бара + отступ для iOS notch */
+/* ==========================================
+   MOBILE FIX - Исправление для таб-бара
+   ========================================== */
+.app { padding-bottom: calc(120px + env(safe-area-inset-bottom, 20px)) !important; min-height: 100vh; }
+.tab-screen { padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); min-height: 60vh; }
+#game { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)) !important; }
+.game-container { padding-bottom: calc(80px + env(safe-area-inset-bottom, 20px)) !important; min-height: calc(100vh - 200px); }
+#gameCanvas { display: block; margin: 0 auto; margin-bottom: 20px; }
+.tab-bar { padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important; z-index: 9999; }
+.undo-toast { bottom: calc(110px + env(safe-area-inset-bottom, 0px)) !important; }
+.comment-toast { bottom: calc(110px + env(safe-area-inset-bottom, 0px)) !important; }
+body { padding-bottom: env(safe-area-inset-bottom, 0px); overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+@supports (padding: env(safe-area-inset-bottom)) {
+  .app { padding-bottom: calc(130px + env(safe-area-inset-bottom)) !important; }
+  .tab-bar { bottom: max(12px, env(safe-area-inset-bottom)); }
 }
-
-/* Исправление для игры */
-#game-tab {
-    min-height: 100vh;
-    padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+@media (max-height: 600px) {
+  .app { padding-bottom: calc(100px + env(safe-area-inset-bottom, 10px)) !important; }
+  .game-container { padding-bottom: calc(60px + env(safe-area-inset-bottom, 10px)) !important; }
 }
-
-#gameCanvas {
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto;
-    margin-bottom: calc(80px + env(safe-area-inset-bottom));
+@media (min-height: 601px) and (max-height: 800px) {
+  .app { padding-bottom: calc(120px + env(safe-area-inset-bottom, 15px)) !important; }
 }
-
-/* Фиксируем таб-бар с учетом safe area */
-.tab-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding-bottom: env(safe-area-inset-bottom) !important;
-    z-index: 1000;
-}
-
-/* Дополнительный отступ для контейнера игры */
-.game-container {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
-    min-height: calc(100vh - 60px);
-}
-
-/* Исправление для кнопок управления игрой */
-.game-controls {
-    margin-bottom: calc(20px + env(safe-area-inset-bottom));
-}
-
-/* Viewport метатег - убедитесь что он есть в HTML */
-/* <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"> */
-
-/* Убираем прокрутку на body когда игра активна */
-body.game-active {
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Для старых iOS устройств */
-@supports not (padding: env(safe-area-inset-bottom)) {
-    .tab-content {
-        padding-bottom: 100px !important;
-    }
-    
-    #game-tab {
-        padding-bottom: 120px !important;
-    }
-    
-    #gameCanvas {
-        margin-bottom: 100px;
-    }
-}
-
-/* Медиа-запрос для маленьких экранов */
-@media (max-height: 700px) {
-    .tab-content {
-        padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important;
-    }
-    
-    #gameCanvas {
-        margin-bottom: calc(60px + env(safe-area-inset-bottom));
-    }
-}
-
-/* Для iOS Safari */
-@media screen and (max-width: 767px) {
-    body {
-        padding-bottom: env(safe-area-inset-bottom);
-    }
-    
-    .container {
-        padding-bottom: calc(80px + env(safe-area-inset-bottom));
-    }
+@media (min-height: 801px) {
+  .app { padding-bottom: calc(140px + env(safe-area-inset-bottom, 20px)) !important; }
 }
