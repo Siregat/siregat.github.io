@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Jäger Diary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<audio id="forestAudio" loop>
+  <source src="forest.mp3" type="audio/mpeg">
+</audio>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <h1>🦌 Jäger Diary</h1>
+    <p class="subtitle">Dark Forest · Liquid Glass</p>
+  </div>
+
+  <div class="glass forest-state" id="forestState">
+  <div class="forest-icon" id="forestIcon">🌲</div>
+  <div class="forest-text" id="forestText">Лес спокоен.</div>
+  <div class="forest-voice" id="forestVoice"></div>
+  <button class="sound-toggle" id="soundToggle">
+  🔈 Лес
+</button>
+
+</div>
+
+
+  <!-- INPUT -->
+  <label>🍾 Выбери напиток</label>
+
+<div class="drink-grid" id="drinkGrid">
+  <button class="drink-btn active" data-drink="Jäger-style">🦌 Jäger</button>
+  <button class="drink-btn" data-drink="Водка">🍸 Водка</button>
+  <button class="drink-btn" data-drink="Лимончелла">🍋 Лимончелла</button>
+  <button class="drink-btn" data-drink="Соджа">🍶 Соджа</button>
+  <button class="drink-btn" data-drink="Вино">🍷 Вино</button>
+  <button class="drink-btn" data-drink="Пиво">🍺 Пиво</button>
+</div>
+
+<div class="drink-description" id="drinkDescription">
+  🦌 Травяной ликёр на основе более чем 50 растений. Часто пьют охлаждённым, небольшими стопками.
+</div>
+
+
+    <label id="amountLabel">🥃 Стопки</label>
+
+<div class="units-control">
+  <button class="unit-btn" onclick="changeUnits(-1)">−</button>
+  <div class="units-visual" id="unitsVisual"></div>
+  <button class="unit-btn" onclick="changeUnits(1)">+</button>
+</div>
+
+<div class="units-count">
+  Выпито: <span id="unitsCount">0</span>
+</div>
+
+    
+
+    <label>🧠 Настроение</label>
+    <div class="mood-grid">
+      <button class="mood-btn" data-value="1">😵</button>
+      <button class="mood-btn" data-value="2">😕</button>
+      <button class="mood-btn active" data-value="3">😐</button>
+      <button class="mood-btn" data-value="4">🙂</button>
+      <button class="mood-btn" data-value="5">😄</button>
+    </div>
+    <label>📝 Комментарий (необязательно)</label>
+<input
+  type="text"
+  id="dayComment"
+  placeholder="друзья, пятница, плохой сон"
+/>
+    <button class="btn-main" onclick="addEntry()">Добавить запись</button>
+    <button  id="undoBtn">
+  ⤺ Отменить последнюю запись
+</button>
+
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="glass tab-screen" id="calendar">
+    <div class="calendar-header">
+      <button onclick="changeMonth(-1)">◀</button>
+      <h2 id="monthTitle"></h2>
+      <button onclick="changeMonth(1)">▶</button>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <div class="glass" id="monthSummary">
+  <h2>📊 Итоги месяца</h2>
+
+  <div class="summary-item">📅 Дней в месяце: <strong id="sumTotal"></strong></div>
+  <div class="summary-item">🍺 Дней с алкоголем: <strong id="sumDrinkDays"></strong></div>
+  <div class="summary-item">🌲 Трезвых дней: <strong id="sumSoberDays"></strong></div>
+
+  <div class="summary-item">🥃 Общая нагрузка: <strong id="sumLoad"></strong></div>
+  <div class="summary-item">📊 Средняя нагрузка: <strong id="sumAvg"></strong></div>
+
+  <div class="summary-item">😄 Лучший день: <strong id="sumBest"></strong></div>
+  <div class="summary-item">💀 Самый тяжёлый день: <strong id="sumWorst"></strong></div>
+  <div class="summary-item">🍾 Частый напиток: <strong id="sumDrink"></strong></div>
+</div>
+
+
+  <!-- MOOD -->
+  <div class="glass tab-screen hidden" id="mood">
+    <h2>📊 Настроение & Алкоголь</h2>
+    <canvas id="moodChart"></canvas>
+  </div>
+
+  <!-- INSIGHTS -->
+<div class="glass tab-screen hidden" id="insights">
+  <h2>💡 Советы & факты</h2>
+
+  <div class="insight-card" id="insightCard">
+    🦌 Загрузка…
+  </div>
+
+  <button class="btn-main" onclick="nextInsight()">
+    Дальше →
+  </button>
+</div>
+<!-- JÄGER HUNT GAME -->
+<div class="glass tab-screen hidden" id="game">
+  <div class="game-container">
+    <div class="arcade-screen">
+      <!-- Заголовок в стиле старых автоматов -->
+      <div class="arcade-header">
+        <div class="arcade-title">🦌 JÄGER HUNT 💀</div>
+        <div class="arcade-score">
+          <span>SCORE: <span id="gameScore">0</span></span>
+          <span>HI: <span id="gameHiScore">0</span></span>
+        </div>
+      </div>
+
+      <!-- Игровой canvas -->
+      <canvas id="gameCanvas" width="280" height="320"></canvas>
+
+      <!-- Информация под экраном -->
+      <div class="arcade-info">
+        <div class="lives-display">
+          <span>LIVES: </span>
+          <span id="gameLives">❤️❤️❤️</span>
+        </div>
+        <div class="wave-display">WAVE: <span id="gameWave">1</span></div>
+      </div>
+
+      <!-- Кнопки управления -->
+      <div class="difficulty-select" id="difficultySelect">
+        <h3 style="text-align: center; color: #9bbc0f; margin-bottom: 12px; font-size: 16px;">ВЫБЕРИ СЛОЖНОСТЬ</h3>
+        <button class="arcade-btn difficulty-btn" data-difficulty="easy">
+          😌 EASY
+          <span style="font-size: 11px; display: block; margin-top: 4px;">Медленно, мало оленей</span>
+        </button>
+        <button class="arcade-btn difficulty-btn" data-difficulty="normal">
+          😐 NORMAL
+          <span style="font-size: 11px; display: block; margin-top: 4px;">Сбалансировано</span>
+        </button>
+        <button class="arcade-btn difficulty-btn" data-difficulty="hardcore">
+          💀 HARDCORE
+          <span style="font-size: 11px; display: block; margin-top: 4px;">БЕЗУМИЕ!</span>
+        </button>
+      </div>
+
+      <div class="arcade-controls hidden" id="gameControls">
+        <button class="arcade-btn arcade-btn-start" id="gameStart">
+          ▶ START
+        </button>
+        <button class="arcade-btn arcade-btn-pause hidden" id="gamePause">
+          ⏸ PAUSE
+        </button>
+      </div>
+
+      <!-- Game Over экран -->
+      <div class="game-over-screen hidden" id="gameOver">
+        <div class="game-over-text">GAME OVER</div>
+        <div class="game-over-score">
+          FINAL SCORE: <span id="finalScore">0</span>
+        </div>
+        <div class="game-over-bonus" id="soberBonus"></div>
+        <button class="arcade-btn arcade-btn-retry" id="gameRetry">
+          ↻ RETRY
+        </button>
+      </div>
+    </div>
+
+    <!-- Highscores -->
+    <div class="highscores-panel">
+      <h3>🏆 HIGHSCORES</h3>
+      <div id="highscoresList"></div>
+    </div>
+
+    <!-- Инструкции -->
+    <div class="game-instructions">
+      <h4>📖 КАК ИГРАТЬ</h4>
+      <p>🎯 Выбери сложность перед началом</p>
+      <p>🦌 Тапай по оленям чтобы стрелять</p>
+      <p>🐗 Кабаны требуют 2 попадания</p>
+      <p>✨ Золотой олень = x2 очки (10 сек)</p>
+      <p>💀 3 промаха = Game Over</p>
+      <p>🌲 Трезвые дни дают бонусы!</p>
+    </div>
+    
+    <!-- Обновления -->
+    <div class="game-updates">
+      <h4>🎁 НОВЫЕ ФИЧИ</h4>
+      
+      <div class="update-section">
+        <h5>❓ Падающие Предметы</h5>
+        <p>Ловите загадочные ящики! Не знаешь что внутри пока не поймаешь:</p>
+        <p><strong>✅ Полезные:</strong> 🍀 Клевер (x2 очки), ⚡ Молния (быстрая стрельба), 💊 Лекарство (+жизнь)</p>
+        <p><strong>❌ Вредные:</strong> 🍺 Пиво (-жизнь), 😵 Похмелье (замедление), 🌪️ Вихрь (хаос)</p>
+      </div>
+      
+      <div class="update-section">
+        <h5>🍷 DRUNK MODE</h5>
+        <p>Игра анализирует твой календарь за 30 дней!</p>
+        <p>🌲 <strong>Больше трезвых</strong> = больше плюшек (до 70%)</p>
+        <p>🍺 <strong>Больше пьяных</strong> = больше проблем + размытие экрана</p>
+        <p>💡 Веди здоровый образ жизни для лучших результатов!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar glass">
+  <button class="tab-btn active" onclick="openTab('calendar', this)">📅 Календарь</button>
+  <button class="tab-btn" onclick="openTab('mood', this)">📊 Настроение</button>
+  <button class="tab-btn" onclick="openTab('insights', this)">💡 Советы</button>
+  <button class="tab-btn" onclick="openTab('game', this)">🎮 Игра</button>
+
+<script src="app.js"></script>
+<script src="game.js"></script>
+
+<div class="comment-toast" id="commentToast">
+  <div class="comment-toast-text" id="commentToastText"></div>
+</div>
+
+<div class="undo-toast" id="undoToast">
+  <span>Запись отменена</span>
+  <button onclick="restoreLastEntry()">Вернуть</button>
+</div>
+
+
+</body>
+</html>
