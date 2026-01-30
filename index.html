@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Jäger Diary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <h1>🦌 Jäger Diary</h1>
+    <p class="subtitle">Dark Forest · Liquid Glass</p>
+  </div>
+
+  <!-- INPUT -->
+  <label>🍾 Выбери напиток</label>
+
+<div class="drink-grid" id="drinkGrid">
+  <button class="drink-btn active" data-drink="Jäger-style">🦌 Jäger</button>
+  <button class="drink-btn" data-drink="Водка">🍸 Водка</button>
+  <button class="drink-btn" data-drink="Лимончелла">🍋 Лимончелла</button>
+  <button class="drink-btn" data-drink="Соджа">🍶 Соджа</button>
+  <button class="drink-btn" data-drink="Вино">🍷 Вино</button>
+  <button class="drink-btn" data-drink="Пиво">🍺 Пиво</button>
+</div>
+
+<div class="drink-description" id="drinkDescription">
+  🦌 Травяной ликёр на основе более чем 50 растений. Часто пьют охлаждённым, небольшими стопками.
+</div>
+
+
+    <label id="amountLabel">🥃 Стопки</label>
+
+<div class="units-control">
+  <button class="unit-btn" onclick="changeUnits(-1)">−</button>
+  <div class="units-visual" id="unitsVisual"></div>
+  <button class="unit-btn" onclick="changeUnits(1)">+</button>
+</div>
+
+<div class="units-count">
+  Выпито: <span id="unitsCount">0</span>
+</div>
+
+    
+
+    <label>🧠 Настроение</label>
+    <div class="mood-grid">
+      <button class="mood-btn" data-value="1">😵</button>
+      <button class="mood-btn" data-value="2">😕</button>
+      <button class="mood-btn active" data-value="3">😐</button>
+      <button class="mood-btn" data-value="4">🙂</button>
+      <button class="mood-btn" data-value="5">😄</button>
+    </div>
+
+    <button class="btn-main" onclick="addEntry()">Добавить запись</button>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="glass tab-screen" id="calendar">
+    <div class="calendar-header">
+      <button onclick="changeMonth(-1)">◀</button>
+      <h2 id="monthTitle"></h2>
+      <button onclick="changeMonth(1)">▶</button>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <!-- MOOD -->
+  <div class="glass tab-screen hidden" id="mood">
+    <h2>📊 Настроение & Алкоголь</h2>
+    <canvas id="moodChart"></canvas>
+  </div>
+
+  <!-- INSIGHTS -->
+<div class="glass tab-screen hidden" id="insights">
+  <h2>💡 Советы & факты</h2>
+
+  <div class="insight-card" id="insightCard">
+    🦌 Загрузка…
+  </div>
+
+  <button class="btn-main" onclick="nextInsight()">
+    Дальше →
+  </button>
+</div>
+
+
+
+</div>
+
+<!-- TABS -->
+<div class="tab-bar glass">
+  <button class="tab-btn active" onclick="openTab('calendar', this)">📅 Календарь</button>
+  <button class="tab-btn" onclick="openTab('mood', this)">📊 Настроение</button>
+  <button class="tab-btn" onclick="openTab('insights', this)">💡 Советы</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
