@@ -801,6 +801,7 @@ canvas {
 
 
 
+
 /* ===== JÄGER HUNT ARCADE ===== */
 .game-container {
   padding-bottom: 60px;
@@ -1181,4 +1182,94 @@ canvas {
 
 .hidden {
   display: none;
+}
+
+/* ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
+/* Добавьте этот код в конец вашего style.css */
+
+/* Исправление для всех секций - добавляем отступ снизу */
+.tab-content {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+    /* 80px для таб-бара + отступ для iOS notch */
+}
+
+/* Исправление для игры */
+#game-tab {
+    min-height: 100vh;
+    padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+}
+
+#gameCanvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+/* Фиксируем таб-бар с учетом safe area */
+.tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    z-index: 1000;
+}
+
+/* Дополнительный отступ для контейнера игры */
+.game-container {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+    min-height: calc(100vh - 60px);
+}
+
+/* Исправление для кнопок управления игрой */
+.game-controls {
+    margin-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+/* Viewport метатег - убедитесь что он есть в HTML */
+/* <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"> */
+
+/* Убираем прокрутку на body когда игра активна */
+body.game-active {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Для старых iOS устройств */
+@supports not (padding: env(safe-area-inset-bottom)) {
+    .tab-content {
+        padding-bottom: 100px !important;
+    }
+    
+    #game-tab {
+        padding-bottom: 120px !important;
+    }
+    
+    #gameCanvas {
+        margin-bottom: 100px;
+    }
+}
+
+/* Медиа-запрос для маленьких экранов */
+@media (max-height: 700px) {
+    .tab-content {
+        padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important;
+    }
+    
+    #gameCanvas {
+        margin-bottom: calc(60px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Для iOS Safari */
+@media screen and (max-width: 767px) {
+    body {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .container {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
 }
